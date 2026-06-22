@@ -1,0 +1,25 @@
+name: Setup test workspace
+inputs:
+  ref-slice-ref:
+    description: 'Git reference (branch name, tag or commit hash) of the ref_slice test fork to checkout'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+      - name: Checkout the ref-slice fork
+        uses: actions/checkout@v3
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: ${{ inputs.ref-slice-ref }}
+          persist-credentials: true
+          path: ref_slice
+      - name: Create dummy crate
+        # This crates do not have matching baselines on crates.io, so any try
+        # of checking them should make cargo-semver-checks fail.
+        run: |
+          cargo new cargo-semver-action-dummy --lib
+          cargo new cargo-semver-action-dummy-2 --lib
+        shell: bash
+      - name: Create workspace Cargo.toml
+        run: echo -e "[workspace]\nmembers=['ref_slice','cargo-semver-action-dummy','cargo-semver-action-dummy-2']" > Cargo.toml
+        shell: bash

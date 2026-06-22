@@ -1,0 +1,49 @@
+name: Smoke test the action
+
+# Assumes that the latest published normal version of `ref_slice` not greater
+# than 1.2.1 is 1.2.1 itself.
+
+on:
+  workflow_call:
+
+env:
+  RUST_BACKTRACE: 1
+
+jobs:
+  run-tests:
+    name: Run tests
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        toolchain: ['1.74', 'stable', 'beta', 'nightly']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout the test repository and test with patch change and patch version bump
+        uses: actions/checkout@v4
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+          persist-credentials: true
+      - name: Checkout the action
+        uses: actions/checkout@v4
+        with:
+          path: action
+      - name: Run the action
+        uses: ./action/
+        with:
+          rust-toolchain: ${{ matrix.toolchain }}
+      - name: Checkout the test with major change and patch version bump
+        run: |
+          git fetch origin major_change
+          git checkout major_change
+      - name: Run the action (expected to fail)
+        id: action_major
+        uses: ./action/
+        with:
+          rust-toolchain: ${{ matrix.toolchain }}
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_major.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of the breaking change, but it has not."
+          exit 1
