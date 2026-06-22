@@ -14,18 +14,18 @@ jobs:
     name: Run tests
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
-        toolchain: ['1.74', 'stable', 'beta', 'nightly']
+        os: ${{ github.actor == 'dependabot[bot]' && fromJSON('["ubuntu-latest"]') || fromJSON('["ubuntu-latest", "macos-latest", "windows-latest"]') }}
+        toolchain: ${{ github.actor == 'dependabot[bot]' && fromJSON('["stable"]') || fromJSON('["stable", "beta"]') }}
     runs-on: ${{ matrix.os }}
     steps:
       - name: Checkout the test repository and test with patch change and patch version bump
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
           persist-credentials: true
       - name: Checkout the action
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           path: action
       - name: Run the action

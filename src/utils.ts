@@ -4,7 +4,7 @@ import * as crypto from "crypto";
 import { glob } from "glob";
 import { hashElement } from "folder-hash";
 import * as exec from "@actions/exec";
-import * as rustCore from "@actions-rs/core";
+import * as rustCore from "./actions-rs";
 
 export function getErrorMessage(error: unknown): string {
     if (error instanceof Error) {

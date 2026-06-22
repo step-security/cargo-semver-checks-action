@@ -31,7 +31,6 @@ jobs:
       #
       # Do not attempt to consolidate these steps into one step, it won't work.
       # Multi-line `if` clauses are not evaluated properly: see the intermediate commits in
-      # https://github.com/obi1kenobi/cargo-semver-checks/pull/405
       - if: ${{ needs.test-build.result != 'success' }}
         run: exit 1
       - if: ${{ needs.test-action.result != 'success' }}

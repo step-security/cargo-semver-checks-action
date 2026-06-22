@@ -4,7 +4,7 @@ import * as path from "path";
 import * as crypto from "crypto";
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
-import * as rustCore from "@actions-rs/core";
+import * as rustCore from "./actions-rs";
 
 import {
     getCargoSemverChecksVersion,

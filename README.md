@@ -5,7 +5,7 @@ Lint your crate API changes for semver violations.
 
 ```yaml
 - name: Check semver
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
 - name: Publish to crates.io
   run: # your `cargo publish` code here
 ```
@@ -29,9 +29,9 @@ semver-checks:
   runs-on: ubuntu-latest
   steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
     - name: Check semver
-      uses: obi1kenobi/cargo-semver-checks-action@v2
+      uses: step-security/cargo-semver-checks-action@v1
 ```
 > **Note**
 > By default, the action always installs the latest stable Rust and ignores the `rust-toolchain.toml` file and any local overrides. This ensures we use the latest version of rustdoc, taking advantage of the latest bugfixes and avoiding false-positives. If you want to change this default behavior, see [Use toolchain other than `stable`](#use-toolchain-other-than-stable).
@@ -61,7 +61,7 @@ Every argument is optional.
 The action will work well with defaults settings if it is run inside the package root directory. When the package location is different, you have to specify the path to its `Cargo.toml` file:
 ```yaml
 - name: Check semver for my-crate
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     manifest-path: semver/my-crate/Cargo.toml  # or just semver/my-crate/
 ```
@@ -69,7 +69,7 @@ The action will work well with defaults settings if it is run inside the package
 In the same way you can provide the path to the workspace `Cargo.toml` file, which will result in checking all its crates:
 ```yaml
 - name: Check semver for all crates from my-workspace
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     manifest-path: semver/my-workspace/Cargo.toml  # or just semver/my-workspace/
 ```
@@ -81,7 +81,7 @@ By default, all packages defined in the `Cargo.toml` file are processed. You can
 For example, this will check `my-crate-api` and `my-crate-core`:
 ```yaml
 - name: Check semver for my-crate-api and my-crate-core
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     package: my-crate-api, my-crate-core
 ```
@@ -89,7 +89,7 @@ For example, this will check `my-crate-api` and `my-crate-core`:
 Inputs `package` and `manifest-path` might be used together:
 ```yaml
 - name: Check semver for my-crate from my-workspace
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     manifest-path: semver/my-workspace/Cargo.toml  # or just semver/my-workspace/
     package: my-crate
@@ -100,7 +100,7 @@ Inputs `package` and `manifest-path` might be used together:
 This will process all crates from the current workspace except `my-crate-tests`:
 ```yaml
 - name: Check semver for all crates except my-crate-tests
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     exclude: my-crate-tests
 ```
@@ -110,18 +110,18 @@ This will process all crates from the current workspace except `my-crate-tests`:
 By default, the actions installs (if necessary) and then uses the `stable` toolchain regardless of local overrides and the `rust-toolchain.toml` file. You can force using a different toolchain using `rust-toolchain`:
 ```yaml
 - name: Check semver
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     rust-toolchain: nightly
 ```
 If you want to setup the toolchain manually, you can set `rust-toolchain` to `manual`. In this case, the action assumes some Rust toolchain is already installed and uses the default one:
 ```yaml
 - name: Setup Rust
-  uses: dtolnay/rust-toolchain@master
+  uses: step-security/dtolnay-rust-toolchain@v1
   with:
     toolchain: stable 2 months ago
 - name: Check semver
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     rust-toolchain: manual
 ```
@@ -141,9 +141,9 @@ semver:
   runs-on: ubuntu-latest
   steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
     - name: Check semver
-      uses: obi1kenobi/cargo-semver-checks-action@v2
+      uses: step-security/cargo-semver-checks-action@v1
       with:
         shared-key: my-workspace-semver
 
@@ -151,11 +151,11 @@ semver2:
   runs-on: ubuntu-latest
   steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
       with:
         path: semver
     - name: Check semver
-      uses: obi1kenobi/cargo-semver-checks-action@v2
+      uses: step-security/cargo-semver-checks-action@v1
       with:
         manifest-path: semver/Cargo.toml
         shared-key: my-workspace-semver
@@ -169,9 +169,9 @@ semver:
       crate: ['api', 'core']
   steps:
     - name: Checkout
-      uses: actions/checkout@v3
+      uses: actions/checkout@v7
     - name: Check semver
-      uses: obi1kenobi/cargo-semver-checks-action@v2
+      uses: step-security/cargo-semver-checks-action@v1
       with:
         package: ${{ matrix.crate }}
         # Do not do this!
@@ -180,7 +180,7 @@ semver:
 as both runs will use separate caches, but providing the shared key will lead to data race and significant drop of performance. On the other hand, if you want to further separate the caches that are shared by default, you can use the input `prefix-key`:
 ```yaml
 - name: Check semver
-  uses: obi1kenobi/cargo-semver-checks-action@v2
+  uses: step-security/cargo-semver-checks-action@v1
   with:
     prefix-key: v1
 ```
