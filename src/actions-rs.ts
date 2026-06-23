@@ -45,7 +45,7 @@ export class Cargo {
             return new Cargo(p);
         } catch (error) {
             core.error(
-                "cargo is not installed. Use the actions-rs/toolchain action to install it.",
+                "cargo is not installed. Use the step-security/actions-rs-toolchain action to install it.",
             );
             throw error;
         }
