@@ -1,0 +1,43 @@
+[[IgnoredVulns]]
+id = "GHSA-h67p-54hq-rp68"
+reason = "js-yaml: Quadratic-complexity DoS in merge key handling via repeated aliases; transitive dev dependency via @istanbuljs/load-nyc-config. Not exploitable in this context."
+
+[[IgnoredVulns]]
+id = "GHSA-2mjp-6q6p-2qxm"
+reason = "undici: HTTP request smuggling via content-length header. Transitive dependency via @actions/github -> @actions/http-client@2.2.3. Not bundled in dist/index.js (other action packages use v6.27.0). Used only at build-time for GitHub API calls in trusted CI environment."
+
+[[IgnoredVulns]]
+id = "GHSA-35p6-xmwp-9g52"
+reason = "undici: Potential XSS via response headers. Transitive dependency via @actions/github. Not in runtime code path; only used for API calls in GitHub Actions environment."
+
+[[IgnoredVulns]]
+id = "GHSA-4992-7rv2-5pvq"
+reason = "undici: Request confusion vulnerability. Transitive dependency via @actions/github. Not in production code path; safe in GitHub Actions CI environment."
+
+[[IgnoredVulns]]
+id = "GHSA-g8m3-5g58-fq7m"
+reason = "undici: Header parsing vulnerability. Transitive dependency via @actions/github. Not bundled in action code."
+
+[[IgnoredVulns]]
+id = "GHSA-g9mf-h72j-4rw9"
+reason = "undici: HTTP smuggling in request parsing. Transitive dependency via @actions/github. Only used for GitHub API calls in trusted CI environment."
+
+[[IgnoredVulns]]
+id = "GHSA-p88m-4jfj-68fv"
+reason = "undici: CRLF injection in request headers. Transitive dependency via @actions/github. Not exposed in action runtime."
+
+[[IgnoredVulns]]
+id = "GHSA-v9p9-hfj2-hcw8"
+reason = "undici: CRLF injection vulnerability. Transitive dependency via @actions/github. Mitigated by GitHub Actions environment controls."
+
+[[IgnoredVulns]]
+id = "GHSA-vrm6-8vpv-qv8q"
+reason = "undici: Request smuggling via Transfer-Encoding header. Transitive dependency via @actions/github. Not in distributed action code."
+
+[[IgnoredVulns]]
+id = "GHSA-vxpw-j846-p89q"
+reason = "undici: HTTP request smuggling. Transitive dependency via @actions/github. Safe in GitHub Actions environment; not exposed to external input."
+
+[[IgnoredVulns]]
+id = "GHSA-w5hq-g745-h8pq"
+reason = "uuid: Predictable random values vulnerability. Transitive dependency via @actions/cache -> @azure/ms-rest-js. Not directly used; uuid generation by ms-rest-js is for internal HTTP client request IDs, not security-sensitive identifiers."
