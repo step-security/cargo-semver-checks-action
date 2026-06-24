@@ -1,0 +1,434 @@
+name: Test action inputs
+
+# Assumes that the latest published normal version of `ref_slice` not greater
+# than 1.2.1 is 1.2.1 itself.
+
+on:
+  workflow_call:
+
+env:
+  RUST_BACKTRACE: 1
+
+jobs:
+  test-package-patch:
+    name: Test input package (patch change)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Setup the workspace with ref_slice patch change
+        uses: ./action/.github/workflows/setup-test-workspace
+        with:
+          ref-slice-ref: patch_change
+      - name: Run the action on ref_slice patch change
+        uses: ./action/
+        with:
+          package: ref_slice
+      - name: Run the action on the whole workspace (expected to fail)
+        id: action_all
+        uses: ./action/
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_all.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of checking the dummy crate, but it has not!"
+          exit 1
+      - name: Run the action on ref_slice fork and one dummy crate (expected to fail)
+        id: action_one_dummy
+        uses: ./action/
+        with:
+          package: ref_slice, cargo-semver-action-dummy
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_one_dummy.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of checking the dummy crate, but it has not!"
+          exit 1
+
+  test-package-major:
+    name: Test input package (major change)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Setup the workspace with ref_slice major change
+        uses: ./action/.github/workflows/setup-test-workspace
+        with:
+          ref-slice-ref: major_change
+      - name: Run the action on ref_slice major change (expected to fail)
+        id: action_major
+        uses: ./action/
+        with:
+          package: ref_slice
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_major.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of the breaking change, but it has not."
+          exit 1
+
+  test-package-exclude-rio:
+    name: Test inputs package and exclude on Rio library
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the Rio repository
+        uses: actions/checkout@v7
+        with:
+          repository: oxigraph/rio
+          ref: 3bd01c2c977a0b01c918f6840cd05356477db358  # branch main
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Run the action using input package
+        uses: ./action/
+        with:
+          package: rio_api, rio_turtle, rio_xml
+      - name: Run the action using input exclude
+        uses: ./action/
+        with:
+          exclude: rio_testsuite
+      - name: Run with only default features
+        uses: ./action/
+        with:
+          package: rio_api, rio_turtle
+          feature-group: default-features
+      - name: Run with explicit features only
+        uses: ./action/
+        with:
+          package: rio_api, rio_turtle
+          feature-group: only-explicit-features
+          feature: generalized
+
+  test-exclude:
+    name: Test input exclude
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Setup the workspace with ref_slice patch change
+        uses: ./action/.github/workflows/setup-test-workspace
+        with:
+          ref-slice-ref: patch_change
+      - name: Run the action excluding both dummy crates
+        uses: ./action/
+        with:
+          exclude: cargo-semver-action-dummy, cargo-semver-action-dummy-2
+      - name: Run the action excluding only one of the dummy crates (expected to fail)
+        id: action_major
+        uses: ./action/
+        with:
+          exclude: cargo-semver-action-dummy
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_major.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of the breaking change, but it has not."
+          exit 1
+
+  test-verbose:
+    # There is currently no way of asserting that the output is indeed verbose,
+    # so we at least check if the action runs without an error when the
+    # verbose option is enabled.
+    name: Test input verbose
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository
+        uses: actions/checkout@v7
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Run the action on ref_slice patch change
+        uses: ./action/
+        with:
+          verbose: true
+
+  test-manifest-path-patch:
+    name: Test input manifest-path (patch change)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Setup the workspace with ref_slice patch change
+        uses: ./action/.github/workflows/setup-test-workspace
+        with:
+          ref-slice-ref: patch_change
+      - name: Run the action on ref_slice patch change (Cargo.toml path)
+        uses: ./action/
+        with:
+          manifest-path: ref_slice/Cargo.toml
+      - name: Run the action on ref_slice patch change (crate path)
+        uses: ./action/
+        with:
+          manifest-path: ref_slice
+      - name: Run the action on the whole workspace (Cargo.toml path, expected to fail)
+        id: action_all_cargo_toml
+        uses: ./action/
+        with:
+          manifest-path: ./Cargo.toml
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_all_cargo_toml.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of checking the dummy crate, but it has not!"
+          exit 1
+
+  test-manifest-path-major:
+    name: Test input manifest-path (major change)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Setup the workspace with ref_slice major change
+        uses: ./action/.github/workflows/setup-test-workspace
+        with:
+          ref-slice-ref: major_change
+      - name: Run the action on ref_slice major change (Cargo.toml path, expected to fail)
+        id: action_major_cargo_toml
+        uses: ./action/
+        with:
+          manifest-path: ref_slice/Cargo.toml
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_major_cargo_toml.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of the breaking change, but it has not."
+          exit 1
+      - name: Run the action on ref_slice major change (crate path, expected to fail)
+        id: action_major_crate
+        uses: ./action/
+        with:
+          manifest-path: ref_slice
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_major_crate.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of the breaking change, but it has not."
+          exit 1
+
+  test-manifest-path-with-space:
+    name: Test input manifest-path against path containing space
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository and test with patch change and patch version bump
+        uses: actions/checkout@v7
+        with:
+          # Space inside the directory name is used in order to ensure it will
+          # be handled properly by the action.
+          path: 'ref slice'
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+          persist-credentials: true
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Run the action
+        uses: ./action/
+        with:
+          manifest-path: 'ref slice/Cargo.toml'
+      - name: Checkout the test with major change and patch version bump
+        run: |
+          cd "ref slice"
+          git fetch origin major_change
+          git checkout major_change
+      - name: Run the action (expected to fail)
+        id: action_major
+        uses: ./action/
+        with:
+          manifest-path: 'ref slice/Cargo.toml'
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_major.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because of the breaking change, but it has not."
+          exit 1
+
+  test-rust-toolchain-against-directory-override:
+    name: Test the action against toolchain override set using rustup
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository
+        uses: actions/checkout@v7
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Install latest beta
+        uses: step-security/dtolnay-rust-toolchain@v1
+        with:
+          toolchain: beta
+      - name: Set local override to beta
+        run: rustup override set beta
+      - name: Run the action with rust-toolchain set to stable
+        uses: ./action/
+        with:
+          rust-toolchain: stable
+      - name: Get cache key
+        uses: actions/cache/restore@v5
+        id: get-cache-key
+        with:
+          path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
+          lookup-only: true
+          key: semver-${{ github.job }}
+          restore-keys: |
+            semver-${{ github.job }}
+      - name: Fail if the toolchain used by the action is invalid
+        if: ${{ steps.get-cache-key.outputs.cache-matched-key != '' && ! contains(steps.get-cache-key.outputs.cache-matched-key, 'stable') }}
+        run: |
+          echo "The toolchain used by the action should be stable, but it is not!"
+          exit 1
+      - name: Check the active toolchain
+        run: |
+          if ! rustup show active-toolchain | grep -q "beta"; then
+            echo "The active toolchain should be still beta, but it is $(rustup show active-toolchain)!"
+            exit 1
+          fi
+
+  test-rust-toolchain-against-toml-override:
+    name: Test the action against toolchain override specified in rust-toolchain.toml file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository
+        uses: actions/checkout@v7
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Install latest beta
+        uses: step-security/dtolnay-rust-toolchain@v1
+        with:
+          toolchain: beta
+      - name: Set override to beta in rust-toolchain.toml file
+        run: echo -e "[toolchain]\nchannel = \"beta\"" > rust-toolchain.toml
+      - name: Run the action with rust-toolchain set to stable
+        uses: ./action/
+        with:
+          rust-toolchain: stable
+      - name: Get cache key
+        uses: actions/cache/restore@v5
+        id: get-cache-key
+        with:
+          path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
+          lookup-only: true
+          key: semver-${{ github.job }}
+          restore-keys: |
+            semver-${{ github.job }}
+      - name: Fail if the toolchain used by the action is invalid
+        if: ${{ steps.get-cache-key.outputs.cache-matched-key != '' && ! contains(steps.get-cache-key.outputs.cache-matched-key, 'stable') }}
+        run: |
+          echo "The toolchain used by the action should be stable, but it is not!"
+          exit 1
+      - name: Check the active toolchain
+        run: |
+          if ! rustup show active-toolchain | grep -q "beta"; then
+            echo "The active toolchain should be still beta, but it is $(rustup show active-toolchain)!"
+            exit 1
+          fi
+
+  test-rust-toolchain-manual:
+    name: Test whether action works properly with rust-toolchain set to 'manual'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository
+        uses: actions/checkout@v7
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Install latest beta
+        uses: step-security/dtolnay-rust-toolchain@v1
+        with:
+          toolchain: beta
+      - name: Set local override to beta
+        run: rustup override set beta
+      - name: Run the action with manual rust-toolchain
+        uses: ./action/
+        with:
+          rust-toolchain: manual
+      - name: Get cache key
+        uses: actions/cache/restore@v5
+        id: get-cache-key
+        with:
+          path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
+          lookup-only: true
+          key: semver-${{ github.job }}
+          restore-keys: |
+            semver-${{ github.job }}
+      - name: Fail if the toolchain used by the action is invalid
+        if: ${{ steps.get-cache-key.outputs.cache-matched-key != '' && ! contains(steps.get-cache-key.outputs.cache-matched-key, 'beta') }}
+        run: |
+          echo "The toolchain used by the action should be beta, but it is not!"
+          exit 1
+      - name: Uninstall Rust
+        run: rustup self uninstall -y
+      - name: Run the action with manual rust-toolchain (expected to fail)
+        id: action_without_rust
+        uses: ./action/
+        with:
+          rust-toolchain: manual
+        continue-on-error: true
+      - name: Fail if the action has not returned any errors (but it should have)
+        if: steps.action_without_rust.outcome != 'failure'
+        run: |
+          echo "Error! The action should have failed because the Rust is not installed and rust-toolchain was set to '', but it has not."
+          exit 1
+
+  test-rust-toolchain-installs-rust:
+    name: Test whether action installs Rust toolchain by default
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository
+        uses: actions/checkout@v7
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: patch_change
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Uninstall Rust
+        run: rustup self uninstall -y
+      - name: Run the action with default arguments
+        uses: ./action/
+
+  test-release-type:
+    name: Test input release-type
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the test repository and test with major change
+        uses: actions/checkout@v7
+        with:
+          repository: mgr0dzicki/cargo-semver-action-ref-slice
+          ref: major_change
+      - name: Checkout the action
+        uses: actions/checkout@v7
+        with:
+          path: action
+      - name: Run the action with release-type set to major
+        uses: ./action/
+        with:
+          release-type: major
