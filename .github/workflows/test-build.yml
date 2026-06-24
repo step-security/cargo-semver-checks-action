@@ -8,11 +8,16 @@ jobs:
     name: Build the action and run TypeScript tests
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         
       - name: Setup Node.js 24.x
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
         with:
           node-version: 24
           
@@ -39,7 +44,7 @@ jobs:
         id: diff_src
         
       - name: Upload the expected version of src/ in case of failure
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ failure() && steps.diff_src.conclusion == 'failure' }}
         with:
           name: expected-src
@@ -54,7 +59,7 @@ jobs:
         id: diff_dist
         
       - name: Upload the expected version of dist/ in case of failure
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         if: ${{ failure() && steps.diff_dist.conclusion == 'failure' }}
         with:
           name: expected-dist
