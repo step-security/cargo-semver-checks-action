@@ -1,5 +1,6 @@
 import * as path from "path";
 import * as fs from "fs";
+import * as crypto from "crypto";
 import * as core from "@actions/core";
 import * as github from "@actions/github";
 import axios, { isAxiosError } from "axios";
@@ -104,15 +105,15 @@ function getGitHubToken(): string {
     return token;
 }
 
-async function getCargoSemverChecksDownloadURL(target: string): Promise<string> {
+async function getCargoSemverChecksAsset(target: string): Promise<{ url: string; digest: string }> {
     const octokit = github.getOctokit(getGitHubToken());
 
-    const getReleaseUrl = await octokit.rest.repos.getLatestRelease({
+    const release = await octokit.rest.repos.getLatestRelease({
         owner: "obi1kenobi",
         repo: "cargo-semver-checks",
     });
 
-    const asset = getReleaseUrl.data.assets.find((asset) => {
+    const asset = release.data.assets.find((asset) => {
         return asset["name"].endsWith(`${target}.tar.gz`);
     });
 
@@ -120,7 +121,9 @@ async function getCargoSemverChecksDownloadURL(target: string): Promise<string> 
         throw new Error(`Couldn't find a release for target ${target}.`);
     }
 
-    return asset.url;
+    const digest = (asset as unknown as { digest?: string }).digest ?? "";
+
+    return { url: asset.url, digest };
 }
 
 async function installRustUpIfRequested(): Promise<void> {
@@ -163,12 +166,31 @@ async function runCargoSemverChecks(cargo: rustCore.Cargo): Promise<void> {
 }
 
 async function installCargoSemverChecksFromPrecompiledBinary(): Promise<void> {
-    const url = await getCargoSemverChecksDownloadURL(getPlatformMatchingTarget());
+    const { url, digest } = await getCargoSemverChecksAsset(getPlatformMatchingTarget());
 
     core.info(`downloading cargo-semver-checks from ${url}`);
     const tarballPath = await toolCache.downloadTool(url, undefined, `token ${getGitHubToken()}`, {
         accept: "application/octet-stream",
     });
+
+    if (digest) {
+        const [algorithm, expectedHash] = digest.split(":");
+        const actualHash = crypto
+            .createHash(algorithm)
+            .update(new Uint8Array(fs.readFileSync(tarballPath)))
+            .digest("hex");
+        if (actualHash !== expectedHash) {
+            throw new Error(
+                `Checksum verification failed for downloaded binary.\nExpected: ${digest}\nActual:   ${algorithm}:${actualHash}`,
+            );
+        }
+        core.info(`Checksum verified: ${digest}`);
+    } else {
+        core.warning(
+            "No checksum available for this release asset; skipping integrity verification.",
+        );
+    }
+
     core.info(`extracting ${tarballPath}`);
     const binPath = await toolCache.extractTar(tarballPath, undefined, ["xz"]);
 
