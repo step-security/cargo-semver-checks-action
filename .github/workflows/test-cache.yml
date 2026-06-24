@@ -14,14 +14,19 @@ jobs:
     name: Check if the cache exists after running the action with shared-key
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository and test with patch change and patch version bump
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: 'ref_slice'
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Run the action
@@ -47,7 +52,7 @@ jobs:
           SEMVER_CHECKS=$(cargo semver-checks --version | sed -e 's/\s\+/-/g')
           echo "KEY=testprefix-testkey-linux-$RUSTC-$SEMVER_CHECKS-d41d8cd98f00b204e9800998ecf8427e-semver-checks-rustdoc" >> $GITHUB_OUTPUT
       - name: Download saved cache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
           key: not_a_prefix
@@ -64,14 +69,19 @@ jobs:
     name: Check if the cache exists after running the action without shared-key
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository and test with patch change and patch version bump
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: 'ref_slice'
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Run the action
@@ -96,7 +106,7 @@ jobs:
           SEMVER_CHECKS=$(cargo semver-checks --version | sed -e 's/\s\+/-/g')
           echo "KEY=testprefix-test-cache-exists-default-d45618ed191f0a73-linux-$RUSTC-$SEMVER_CHECKS-d41d8cd98f00b204e9800998ecf8427e-semver-checks-rustdoc" >> $GITHUB_OUTPUT
       - name: Download saved cache
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         with:
           path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
           key: not_a_prefix

@@ -14,8 +14,13 @@ jobs:
     name: Test input package (patch change)
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Setup the workspace with ref_slice patch change
@@ -51,8 +56,13 @@ jobs:
     name: Test input package (major change)
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Setup the workspace with ref_slice major change
@@ -75,13 +85,18 @@ jobs:
     name: Test inputs package and exclude on Rio library
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the Rio repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: oxigraph/rio
           ref: 3bd01c2c977a0b01c918f6840cd05356477db358  # branch main
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Run the action using input package
@@ -108,8 +123,13 @@ jobs:
     name: Test input exclude
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Setup the workspace with ref_slice patch change
@@ -139,13 +159,18 @@ jobs:
     name: Test input verbose
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Run the action on ref_slice patch change
@@ -157,8 +182,13 @@ jobs:
     name: Test input manifest-path (patch change)
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Setup the workspace with ref_slice patch change
@@ -189,8 +219,13 @@ jobs:
     name: Test input manifest-path (major change)
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Setup the workspace with ref_slice major change
@@ -224,8 +259,13 @@ jobs:
     name: Test input manifest-path against path containing space
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository and test with patch change and patch version bump
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           # Space inside the directory name is used in order to ensure it will
           # be handled properly by the action.
@@ -234,7 +274,7 @@ jobs:
           ref: patch_change
           persist-credentials: true
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Run the action
@@ -262,17 +302,22 @@ jobs:
     name: Test the action against toolchain override set using rustup
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Install latest beta
-        uses: step-security/dtolnay-rust-toolchain@v1
+        uses: step-security/dtolnay-rust-toolchain@8dd607977d06adf4ed49b190381e74c17a9dd25f # v1.0.0
         with:
           toolchain: beta
       - name: Set local override to beta
@@ -282,7 +327,7 @@ jobs:
         with:
           rust-toolchain: stable
       - name: Get cache key
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: get-cache-key
         with:
           path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
@@ -306,17 +351,22 @@ jobs:
     name: Test the action against toolchain override specified in rust-toolchain.toml file
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Install latest beta
-        uses: step-security/dtolnay-rust-toolchain@v1
+        uses: step-security/dtolnay-rust-toolchain@8dd607977d06adf4ed49b190381e74c17a9dd25f # v1.0.0
         with:
           toolchain: beta
       - name: Set override to beta in rust-toolchain.toml file
@@ -326,7 +376,7 @@ jobs:
         with:
           rust-toolchain: stable
       - name: Get cache key
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: get-cache-key
         with:
           path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
@@ -350,17 +400,22 @@ jobs:
     name: Test whether action works properly with rust-toolchain set to 'manual'
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Install latest beta
-        uses: step-security/dtolnay-rust-toolchain@v1
+        uses: step-security/dtolnay-rust-toolchain@8dd607977d06adf4ed49b190381e74c17a9dd25f # v1.0.0
         with:
           toolchain: beta
       - name: Set local override to beta
@@ -370,7 +425,7 @@ jobs:
         with:
           rust-toolchain: manual
       - name: Get cache key
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@27d5ce7f107fe9357f9df03efb73ab90386fccae # v5.0.5
         id: get-cache-key
         with:
           path: ${{ github.workspace }}/semver-checks/target/semver-checks/cache
@@ -401,13 +456,18 @@ jobs:
     name: Test whether action installs Rust toolchain by default
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Uninstall Rust
@@ -419,13 +479,18 @@ jobs:
     name: Test input release-type
     runs-on: ubuntu-latest
     steps:
+      - name: Harden the runner (Audit all outbound calls)
+        uses: step-security/harden-runner@9af89fc71515a100421586dfdb3dc9c984fbf411 # v2.19.4
+        with:
+          egress-policy: audit
+
       - name: Checkout the test repository and test with major change
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: major_change
       - name: Checkout the action
-        uses: actions/checkout@v7
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
         with:
           path: action
       - name: Run the action with release-type set to major
