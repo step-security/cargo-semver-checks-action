@@ -20,7 +20,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Setup the workspace with ref_slice patch change
@@ -62,7 +62,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Setup the workspace with ref_slice major change
@@ -91,12 +91,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the Rio repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: oxigraph/rio
           ref: 3bd01c2c977a0b01c918f6840cd05356477db358  # branch main
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Run the action using input package
@@ -129,7 +129,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Setup the workspace with ref_slice patch change
@@ -165,12 +165,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Run the action on ref_slice patch change
@@ -188,7 +188,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Setup the workspace with ref_slice patch change
@@ -225,7 +225,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Setup the workspace with ref_slice major change
@@ -265,7 +265,7 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository and test with patch change and patch version bump
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           # Space inside the directory name is used in order to ensure it will
           # be handled properly by the action.
@@ -274,7 +274,7 @@ jobs:
           ref: patch_change
           persist-credentials: true
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Run the action
@@ -308,12 +308,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Install latest beta
@@ -357,12 +357,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Install latest beta
@@ -406,12 +406,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Install latest beta
@@ -462,12 +462,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: patch_change
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Uninstall Rust
@@ -485,12 +485,12 @@ jobs:
           egress-policy: audit
 
       - name: Checkout the test repository and test with major change
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           repository: mgr0dzicki/cargo-semver-action-ref-slice
           ref: major_change
       - name: Checkout the action
-        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           path: action
       - name: Run the action with release-type set to major
